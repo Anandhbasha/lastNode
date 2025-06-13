@@ -21,12 +21,28 @@ export const insert_data = async(req,res)=>{
         res.status(403).json({message:"Unable to insert Data"})
     }
 }
-export const updateData = (req,res)=>{
-    const {id} = req.params
-    const{userPassword} = req.body
-    res.send(`userPassword is:${userPassword} is Updated Succesfully`)
+export const updateData =async (req,res)=>{
+    try {
+        const {userName} = req.params
+        const{userMobile} = req.body
+        const updataUser = await User.findOneAndUpdate({userName},{$set:{userMobile}})
+        if(!updataUser){
+            return res.status(404).json({message:"User Not fount"})
+        }
+        return res.status(205).json({message:`Update ${userName}info Sucessfully`})
+    } catch (error) {
+        return res.status(500).json({message:"error"})
+    }
 }
-export const deleteData = (req,res)=>{
-    const {id} = req.params
-    res.send(`${id} User Deleted Succes`)
+export const deleteData = async(req,res)=>{
+    try {
+        const {userName} = req.params
+        const deleteUser = await User.findOneAndDelete({userName})
+        if(!deleteUser){
+            return res.status(404).json({message:"User Not Found"})
+        }
+        return res.status(206).json({message:`${userName} User Deleted Success`})
+    } catch (error) {
+        return res.status(406).json({message:`${userName} Unable to Delete`})
+    }
 }

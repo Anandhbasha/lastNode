@@ -6,7 +6,7 @@ const route = express.Router()
 route.get('/', read_data)
 
 route.post('/insert',insert_data)
-route.put('/edit/:id',updateData)
-route.delete('/delete/:id',deleteData)
+route.put('/edit/:userName',updateData)
+route.delete('/delete/:userName',deleteData)
 
 export default route
