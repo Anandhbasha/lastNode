@@ -5,7 +5,8 @@ const userModel = new mongoose.Schema(
         userName:String,
         userMobile:Number,
         userAge:Number,
-        userAddress:String
+        userAddress:String,
+        userPassword:String
     }
 )
 

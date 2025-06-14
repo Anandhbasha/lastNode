@@ -1,4 +1,5 @@
 import User from "../Model/Model.js"
+import bcrypt from "bcryptjs"
 
 export const read_data = async(req,res)=>{
     try {
@@ -44,5 +45,23 @@ export const deleteData = async(req,res)=>{
         return res.status(206).json({message:`${userName} User Deleted Success`})
     } catch (error) {
         return res.status(406).json({message:`${userName} Unable to Delete`})
+    }
+}
+
+//register New user
+export const insertUser = async(req,res)=>{
+    try {
+        const {userName,userPassword} = req.body
+        const exist_user = await User.findOne({userName})
+        if(exist_user){
+            return res.status(404).json({message:"User already exist"})
+        }
+        // const insertUser = await User({userName,userPassword}).save()
+        const Salt =await bcrypt.genSalt(10)
+        const hassedPassword = await bcrypt.hash(userPassword,Salt)        
+        const inserNewUser = await User({userName:userName,userPassword:hassedPassword}).save()
+        return res.status(201).json({message:"Data Succesfully inserted",data:inserNewUser})
+    } catch (error) {
+        return res.status(423).json({message:"Data Not inserted",data:error})
     }
 }
